@@ -11,6 +11,12 @@ class puppet::puppetmaster ( $git_ssh_key ) {
     before  => Package[ 'puppet' ],
   }
 
+  if !defined(Package[ 'git' ]) {
+    package { 'git':
+      ensure => installed,
+    }
+  }
+
   user { 'git':
     ensure      => present,
     managehome  => true,
