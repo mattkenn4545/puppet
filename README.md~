@@ -1,6 +1,0 @@
-puppet_common
-=============
-
-Basic initial setup for puppet, Agent and Master.
-
-The puppet master should be running puppetdb (use my puppetmaster module to make that easy)
