@@ -17,6 +17,11 @@ class puppet::puppetmaster ( $git_ssh_key ) {
     }
   }
 
+  package { 'librarian-puppet':
+    ensure   => 'installed',
+    provider => 'gem',
+  }
+
   user { 'git':
     ensure      => present,
     managehome  => true,
