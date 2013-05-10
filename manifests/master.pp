@@ -1,4 +1,4 @@
-class puppet::puppetmaster ( $git_ssh_key ) {
+class puppet::master ( $git_ssh_key ) {
   package { 'puppetmaster-passenger':
     ensure  => installed,
     require => Apt::Source[ 'puppetlabs' ],
