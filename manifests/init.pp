@@ -3,6 +3,11 @@ class puppet {
     ensure => absent,
   }
 
+  file { '/etc/apt/apt.conf':
+    content => '',
+    before  => Apt::Source['puppetlabs'],
+  }
+
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com',
     repos      => 'main dependencies',
@@ -11,14 +16,20 @@ class puppet {
   }
 
   package { 'puppet':
-    ensure => latest,
-    require => Apt::Source[ 'puppetlabs' ],
+    ensure  => latest,
+    notify  => Exec['kill-puppet'],
+  }
+
+  exec { "kill-puppet":
+    command     => "killall -9 puppet",
+    refreshonly =>  true,
   }
 
   service { 'puppet':
-    enable  => true,
-    ensure  => running,
-    require => [ Package[ 'puppet' ], Ini_setting[ 'enablepuppet' ] ],
+    enable      => true,
+    ensure      => running,
+    hasrestart  => true,
+    require     => [ Package[ 'puppet' ], Ini_setting[ 'enablepuppet' ] ],
   }
 
   file { '/etc/puppet/puppet.conf':

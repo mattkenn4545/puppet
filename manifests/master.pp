@@ -1,14 +1,13 @@
 class puppet::master ( $git_ssh_key ) {
   package { 'puppetmaster-passenger':
     ensure  => installed,
-    require => Apt::Source[ 'puppetlabs' ],
-    before  => Package[ 'puppet' ],
+    before  => Service[ 'puppet' ],
   }
 
   host { 'puppet':
     ensure  => present,
     ip      => '127.0.1.1',
-    before  => Package[ 'puppet' ],
+    before  => Service[ 'puppet' ],
   }
 
   if !defined(Package[ 'git' ]) {
@@ -32,7 +31,7 @@ class puppet::master ( $git_ssh_key ) {
     mode    => '0755',
     owner   => 'git',
     group   => 'git',
-    require => [ User[ 'git' ], Package[ 'puppet' ] ],
+    require => [ User[ 'git' ], Package[ 'puppetmaster-passenger' ] ],
   }
 
   file { '/opt/puppet.git':
