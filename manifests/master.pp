@@ -16,7 +16,7 @@ class puppet::master ( $git_ssh_key ) {
     }
   }
 
-  file { '/etc/puppet/auth.conf'
+  file { '/etc/puppet/auth.conf':
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
