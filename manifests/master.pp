@@ -16,6 +16,14 @@ class puppet::master ( $git_ssh_key ) {
     }
   }
 
+  file { '/etc/puppet/auth.conf'
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    source  => "puppet:///modules/${module_name}/auth.conf",
+    require => Package[ 'puppetmaster-passenger' ],
+  }
+
   package { 'librarian-puppet':
     ensure   => 'installed',
     provider => 'gem',
