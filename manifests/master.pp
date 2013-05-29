@@ -1,6 +1,28 @@
-class puppet::master ( $git_ssh_key ) {
+class puppet::master (
+    $version = $puppet::params::version,
+    $environment_dir_owner = 'www-data',
+) inherits puppet::params {
+
+
+  if $version == undef { $pin_ensure = 'absent' }
+  else {  $pin_ensure = 'present' }
+
+  apt::pin { 'puppetmaster-passenger':
+    ensure   => $pin_ensure,
+    packages => 'puppetmaster-passenger',
+    version  => $version,
+    priority => 1001,
+  }
+
+  apt::pin { 'puppetmaster-common':
+    ensure   => $pin_ensure,
+    packages => 'puppetmaster-common',
+    version  => $version,
+    priority => 1001,
+  }
+
   package { 'puppetmaster-passenger':
-    ensure  => installed,
+    ensure  => latest,
     before  => Service[ 'puppet' ],
   }
 
@@ -8,12 +30,6 @@ class puppet::master ( $git_ssh_key ) {
     ensure  => present,
     ip      => '127.0.1.1',
     before  => Service[ 'puppet' ],
-  }
-
-  if !defined(Package[ 'git' ]) {
-    package { 'git':
-      ensure => installed,
-    }
   }
 
   file { '/etc/puppet/auth.conf':
@@ -24,62 +40,11 @@ class puppet::master ( $git_ssh_key ) {
     require => Package[ 'puppetmaster-passenger' ],
   }
 
-  package { 'librarian-puppet':
-    ensure   => 'installed',
-    provider => 'gem',
-  }
-
-  user { 'git':
-    ensure      => present,
-    managehome  => true,
-  }
-
   file { '/etc/puppet/environments':
     ensure => directory,
     mode    => '0755',
-    owner   => 'git',
-    group   => 'git',
-    require => [ User[ 'git' ], Package[ 'puppetmaster-passenger' ] ],
-  }
-
-  file { '/opt/puppet.git':
-    ensure => directory,
-    mode    => '0755',
-    owner   => 'git',
-    group   => 'git',
-    require => User[ 'git' ],
-  }
-
-  exec { 'git --bare init':
-    cwd     => '/opt/puppet.git',
-    creates => '/opt/puppet.git/description',
-    user    => 'git',
-    require => [ File[ '/opt/puppet.git' ], Package[ 'git' ] ],
-  }
-
-  file { '/home/git/.ssh':
-    ensure  => directory,
-    mode    => '0750',
-    owner   => 'git',
-    group   => 'git',
-    require => User[ 'git' ],
-  }
-
-  file { 'post-receive':
-    ensure  => present,
-    mode    => '0755',
-    owner   => 'git',
-    group   => 'git',
-    source  => "puppet:///modules/${module_name}/post-receive",
-    path    => "/opt/puppet.git/hooks/post-receive",
-    require => [ File[ '/opt/puppet.git' ], Exec[ 'git --bare init' ] ]
-  }
-
-  ssh_authorized_key { 'git_ssh_authorized_key':
-    ensure    => present,
-    type      => ssh-rsa,
-    key       => "${git_ssh_key}",
-    user      => 'git',
-    require   => File[ '/home/git/.ssh' ],
+    owner   => $environment_dir_owner,
+    group   => $environment_dir_owner,
+    require => Package[ 'puppetmaster-passenger' ],
   }
 }

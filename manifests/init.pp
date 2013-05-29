@@ -1,11 +1,11 @@
-class puppet {
-  package { 'puppetlabs-release':
-    ensure => absent,
+class puppet ( $version = undef ) {
+
+  class { 'puppet::params':
+    version => $version,
   }
 
-  file { '/etc/apt/apt.conf':
-    content => '',
-    before  => Apt::Source['puppetlabs'],
+  package { 'puppetlabs-release':
+    ensure => absent,
   }
 
   apt::source { 'puppetlabs':
@@ -13,23 +13,6 @@ class puppet {
     repos      => 'main dependencies',
     key        => '4BD6EC30',
     key_server => 'pgp.mit.edu',
-  }
-
-  package { 'puppet':
-    ensure  => latest,
-    notify  => Exec['kill-puppet'],
-  }
-
-  exec { "kill-puppet":
-    command     => "killall -9 puppet",
-    refreshonly =>  true,
-  }
-
-  service { 'puppet':
-    enable      => true,
-    ensure      => running,
-    hasrestart  => true,
-    require     => [ Package[ 'puppet' ], Ini_setting[ 'enablepuppet' ] ],
   }
 
   file { '/etc/puppet/puppet.conf':
@@ -40,14 +23,5 @@ class puppet {
     source  => "puppet:///modules/${module_name}/puppet.conf",
     require => Package[ 'puppet' ],
     notify  => Service[ 'puppet' ],
-  }
-
-  ini_setting { 'enablepuppet':
-    ensure  => present,
-    path    => '/etc/default/puppet',
-    section => '',
-    setting => 'START',
-    value   => 'yes',
-    require => Package[ 'puppet' ],
   }
 }
