@@ -1,7 +1,11 @@
-class puppet ( $version = undef ) {
+class puppet (
+  $version = undef,
+  $puppetmaster = 'puppet'
+) {
 
   class { 'puppet::params':
-    version => $version,
+    version       => $version,
+    puppetmaster  => $puppetmaster,
   }
 
   package { 'puppetlabs-release':
@@ -20,7 +24,7 @@ class puppet ( $version = undef ) {
     owner   => root,
     group   => root,
     mode    => 0644,
-    source  => "puppet:///modules/${module_name}/puppet.conf",
+    content => template("${module_name}/puppet.conf.erb"),
     require => Package[ 'puppet' ],
     notify  => Service[ 'puppet' ],
   }

@@ -1,5 +1,5 @@
 [main]
-  server = puppet
+  server = <%= @puppetmaster %>
   environment = production
   confdir = /etc/puppet
 
@@ -21,7 +21,7 @@
   storeconfigs = true
 
   reports = store, http
-  reporturl = http://puppet:3000/reports/upload
+  reporturl = http://<%= @puppetmaster %>:3000/reports/upload
 
 [agent]
   report = true
