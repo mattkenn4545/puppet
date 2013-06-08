@@ -7,7 +7,7 @@ class puppet::master_git (
 
   class { 'puppet::master':
     version               => $version,
-    evironment_dir_owner  => $environment_dir_owner,
+    environment_dir_owner  => $environment_dir_owner,
   }
 
   if !defined(Package[ 'git' ]) {
