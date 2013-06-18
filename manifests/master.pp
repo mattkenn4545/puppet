@@ -26,6 +26,10 @@ class puppet::master (
     before  => Service[ 'puppet' ],
   }
 
+  package { 'rubygems':
+    ensure => present,
+  }
+
   host { 'puppet':
     ensure  => present,
     ip      => '127.0.1.1',
