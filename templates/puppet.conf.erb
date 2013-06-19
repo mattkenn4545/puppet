@@ -11,6 +11,9 @@
   pluginsync = true
 
 [master]
+  node_terminus = exec
+  externalnodes = /usr/bin/env PUPPET_DASHBOARD_URL=http://localhost:3000 /usr/share/puppet-dashboard/bin/external_node
+
   environment = production
   manifest    = $confdir/environments/$environment/manifests/site.pp
   modulepath  = $confdir/environments/$environment/modules
