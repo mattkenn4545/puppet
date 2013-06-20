@@ -22,12 +22,6 @@ class puppet::agent (
 
   package { 'puppet':
     ensure  => latest,
-    notify  => Exec['kill-puppet'],
-  }
-
-  exec { "kill-puppet":
-    command     => "killall -9 puppet",
-    refreshonly =>  true,
   }
 
   ini_setting { 'enablepuppet':
