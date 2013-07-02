@@ -51,4 +51,18 @@ class puppet::master (
     group   => $environment_dir_owner,
     require => Package[ 'puppetmaster-passenger' ],
   }
+
+  if $::fqdn == 'vagrantpuppet.vagrantnet' {
+    file { '/etc/puppet/environments/production':
+      ensure  => link,
+      target  => '/vagrant',
+      require => File['/etc/puppet/environments'],
+    }
+
+    file { '/etc/puppet/autosign.conf':
+      ensure  => present,
+      content  => '*',
+      require => File['/etc/puppet/environments'],
+    }
+  }
 }
