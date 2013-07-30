@@ -52,7 +52,7 @@ class puppet::master (
     require => Package[ 'puppetmaster-passenger' ],
   }
 
-  if $::fqdn == 'vagrantpuppet.vagrantnet' {
+  if $::fqdn == 'puppet.vnet' {
     file { '/etc/puppet/environments/production':
       ensure  => link,
       target  => '/vagrant',
