@@ -52,6 +52,13 @@ class puppet::master (
     require => Package[ 'puppetmaster-passenger' ],
   }
 
+  cron { 'reports cleanup':
+    command => "find /var/lib/puppet/reports/* -mtime +1 -type f -exec rm -rf {} \;",
+    user    => root,
+    hour    => 3,
+    minute  => 30
+  }
+
   if $::fqdn == 'puppet.vnet' {
     file { '/etc/puppet/environments/production':
       ensure  => link,
