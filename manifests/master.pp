@@ -53,7 +53,7 @@ class puppet::master (
   }
 
   cron { 'reports cleanup':
-    command => "find /var/lib/puppet/reports/* -mtime +1 -type f -exec rm -rf {} \;",
+    command => 'find /var/lib/puppet/reports/* -mtime +1 -type f -exec rm -rf {} \;',
     user    => root,
     hour    => 3,
     minute  => 30
