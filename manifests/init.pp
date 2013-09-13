@@ -8,10 +8,6 @@ class puppet (
     puppetmaster  => $puppetmaster,
   }
 
-  package { 'puppetlabs-release':
-    ensure => absent,
-  }
-
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com',
     repos      => 'main dependencies',
