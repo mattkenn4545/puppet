@@ -1,6 +1,6 @@
 class puppet::master (
     $version = $puppet::params::version,
-    $environment_dir_owner = 'www-data',
+    $environment_dir_owner = 'www-data'
 ) inherits puppet::params {
 
 
@@ -53,7 +53,7 @@ class puppet::master (
   }
 
   cron { 'reports cleanup':
-    command => 'find /var/lib/puppet/reports/* -mtime +1 -type f -exec rm -rf {} \;',
+    command => 'find /var/lib/puppet/reports/* -mtime +7 -type f -exec rm -rf {} \;',
     user    => root,
     hour    => 3,
     minute  => 30
