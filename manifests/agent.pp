@@ -39,4 +39,18 @@ class puppet::agent (
     hasrestart  => true,
     require     => [ Package[ 'puppet' ], Ini_setting[ 'enablepuppet' ] ],
   }
+
+  file { 'runpuppet':
+    path    => '/bin/runpuppet',
+    owner   => 'root',
+    mode    => '0755',
+    content => 'sudo puppet agent --verbose --no-daemonize --onetime --no-splay',
+  }
+
+  file { 'debugpuppet':
+    path    => '/bin/debugpuppet',
+    owner   => 'root',
+    mode    => '0755',
+    content => 'sudo puppet agent --verbose --no-daemonize --onetime --no-splay --debug',
+  }
 }
