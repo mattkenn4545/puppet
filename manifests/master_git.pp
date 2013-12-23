@@ -16,7 +16,7 @@ class puppet::master_git (
     }
   }
 
-  package { 'librarian-puppet-maestrodev':
+  package { 'librarian-puppet-simple':
     ensure   => 'installed',
     provider => 'gem',
   }
