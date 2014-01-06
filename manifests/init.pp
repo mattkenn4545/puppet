@@ -1,6 +1,6 @@
 class puppet (
-  $version = undef,
-  $puppetmaster = 'puppet'
+  $version        = undef,
+  $puppetmaster   = 'puppet'
 ) {
 
   class { 'puppet::params':
@@ -17,13 +17,11 @@ class puppet (
 
   file { '/etc/puppet/puppet.conf':
     ensure  => present,
-    owner   => root,
-    group   => root,
-    mode    => 0644,
+    owner   => 'root',
+    group   => 'root',
+    mode    => 644,
     content => template("${module_name}/puppet.conf.erb"),
     require => Package[ 'puppet' ],
     notify  => Service[ 'puppet' ],
   }
-
-  Exec["apt_update"] -> Package <| |>
 }

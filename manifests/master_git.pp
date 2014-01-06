@@ -1,6 +1,6 @@
 class puppet::master_git (
-    $version = $puppet::params::version,
-    $git_ssh_key,
+    $version      = $puppet::params::version,
+    $git_ssh_key
 ) inherits puppet::params {
 
   $environment_dir_owner = 'git'

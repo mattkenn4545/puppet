@@ -1,8 +1,7 @@
 class puppet::master (
-    $version = $puppet::params::version,
-    $environment_dir_owner = 'www-data'
+    $version                = $puppet::params::version,
+    $environment_dir_owner  = 'www-data'
 ) inherits puppet::params {
-
 
   if $version == undef { $pin_ensure = 'absent' }
   else {  $pin_ensure = 'present' }

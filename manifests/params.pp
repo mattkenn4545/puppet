@@ -1,4 +1,4 @@
 class puppet::params (
-  $version = undef,
-  $puppetmaster = 'puppet',
+  $version        = undef,
+  $puppetmaster   = 'puppet'
 ) { }

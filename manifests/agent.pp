@@ -1,7 +1,6 @@
 class puppet::agent (
-    $version = $puppet::params::version,
+    $version = $puppet::params::version
 ) inherits puppet::params {
-
 
   if $version == undef { $pin_ensure = 'absent' }
   else {  $pin_ensure = 'present' }
