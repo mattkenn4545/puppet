@@ -24,4 +24,6 @@ class puppet (
     require => Package[ 'puppet' ],
     notify  => Service[ 'puppet' ],
   }
+
+  Exec["apt_update"] -> Package <| |>
 }
