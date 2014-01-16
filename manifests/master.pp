@@ -1,6 +1,6 @@
 class puppet::master (
-    $version                = $puppet::params::version,
-    $environment_dir_owner  = 'www-data'
+  $environment_dir_owner  = 'www-data',
+  $autosign               = ''
 ) inherits puppet::params {
 
   if $version == undef { $pin_ensure = 'absent' }
@@ -58,17 +58,9 @@ class puppet::master (
     minute  => 30
   }
 
-  if $::fqdn == 'puppet.vnet' {
-    file { '/etc/puppet/environments/production':
-      ensure  => link,
-      target  => '/vagrant',
-      require => File['/etc/puppet/environments'],
-    }
-
-    file { '/etc/puppet/autosign.conf':
-      ensure  => present,
-      content  => '*',
-      require => File['/etc/puppet/environments'],
-    }
+  file { '/etc/puppet/autosign.conf':
+    ensure  => present,
+    content  => $autosign,
+    require => File['/etc/puppet/environments'],
   }
 }
