@@ -1,39 +1,43 @@
-class puppet::agent inherits puppet {
-  if $version == 'unset' { $pin_ensure = 'absent' }
-  else {  $pin_ensure = 'present' }
-
+class puppet::agent inherits puppet::params {
   apt::pin { 'puppet':
     ensure   => $pin_ensure,
     packages => 'puppet',
     version  => $version,
     priority => 1001,
-  }
+  } ->
 
   apt::pin { 'puppet-common':
     ensure   => $pin_ensure,
     packages => 'puppet-common',
     version  => $version,
     priority => 1001,
-  }
+  } ->
 
   package { 'puppet':
     ensure  => latest,
-  }
+  } ->
+
+  file { '/etc/puppet/puppet.conf':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => 644,
+    content => template("${module_name}/puppet.conf.erb"),
+    notify  => Service[ 'puppet' ]
+  } ->
 
   ini_setting { 'enablepuppet':
     ensure  => present,
     path    => '/etc/default/puppet',
     section => '',
     setting => 'START',
-    value   => 'yes',
-    require => Package[ 'puppet' ],
-  }
+    value   => 'yes'
+  } ->
 
   service { 'puppet':
     enable      => true,
     ensure      => running,
-    hasrestart  => true,
-    require     => [ Package[ 'puppet' ], Ini_setting[ 'enablepuppet' ] ],
+    hasrestart  => true
   }
 
   file { 'runpuppet':

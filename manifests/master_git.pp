@@ -1,26 +1,26 @@
 class puppet::master_git (
-  $git_ssh_key  =   pick($git_ssh_key, 'unset')
+  $git_ssh_key  =   undef
 ) inherits puppet {
-  $environment_dir_owner = 'git'
-
-  class { 'puppet::master':
-    environment_dir_owner  => $environment_dir_owner,
-  }
+  include puppet::master
 
   if !defined(Package[ 'git' ]) {
     package { 'git':
-      ensure => installed,
+      ensure => installed
     }
+  }
+
+  package { 'rubygems':
+    ensure    => present
   }
 
   package { 'librarian-puppet-simple':
     ensure   => 'installed',
-    provider => 'gem',
+    provider => 'gem'
   }
 
   user { 'git':
     ensure      => present,
-    managehome  => true,
+    managehome  => true
   }
 
   file { '/opt/puppet.git':
@@ -28,14 +28,14 @@ class puppet::master_git (
     mode    => '0755',
     owner   => 'git',
     group   => 'git',
-    require => User[ 'git' ],
+    require => User[ 'git' ]
   }
 
   exec { 'git --bare init':
     cwd     => '/opt/puppet.git',
     creates => '/opt/puppet.git/description',
     user    => 'git',
-    require => [ File[ '/opt/puppet.git' ], Package[ 'git' ] ],
+    require => [ File[ '/opt/puppet.git' ], Package[ 'git' ] ]
   }
 
   file { '/home/git/.ssh':
@@ -43,7 +43,7 @@ class puppet::master_git (
     mode    => '0750',
     owner   => 'git',
     group   => 'git',
-    require => User[ 'git' ],
+    require => User[ 'git' ]
   }
 
   file { 'post-receive':
@@ -55,13 +55,13 @@ class puppet::master_git (
     path    => "/opt/puppet.git/hooks/post-receive",
     require => [ File[ '/opt/puppet.git' ], Exec[ 'git --bare init' ] ]
   }
-  if ($git_ssh_key != 'unset') {
+  if ($git_ssh_key) {
     ssh_authorized_key { 'git_ssh_authorized_key':
       ensure    => present,
       type      => ssh-rsa,
       key       => $git_ssh_key,
       user      => 'git',
-      require   => File[ '/home/git/.ssh' ],
+      require   => File[ '/home/git/.ssh' ]
     }
   }
 }
