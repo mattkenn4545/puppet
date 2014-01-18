@@ -1,13 +1,7 @@
 class puppet (
-  $version        = undef,
+  $version        = pick($::puppet_version, 'unset'),
   $puppetmaster   = 'puppet'
 ) {
-
-  class { 'puppet::params':
-    version       => $version,
-    puppetmaster  => $puppetmaster,
-  }
-
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com',
     repos      => 'main dependencies',

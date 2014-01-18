@@ -1,6 +1,6 @@
 class puppet::master_git (
-  $git_ssh_key
-) inherits puppet::params {
+  $git_ssh_key  =   pick($git_ssh_key, 'unset')
+) inherits puppet {
   $environment_dir_owner = 'git'
 
   class { 'puppet::master':
@@ -55,12 +55,13 @@ class puppet::master_git (
     path    => "/opt/puppet.git/hooks/post-receive",
     require => [ File[ '/opt/puppet.git' ], Exec[ 'git --bare init' ] ]
   }
-
-  ssh_authorized_key { 'git_ssh_authorized_key':
-    ensure    => present,
-    type      => ssh-rsa,
-    key       => "${git_ssh_key}",
-    user      => 'git',
-    require   => File[ '/home/git/.ssh' ],
+  if ($git_ssh_key != 'unset') {
+    ssh_authorized_key { 'git_ssh_authorized_key':
+      ensure    => present,
+      type      => ssh-rsa,
+      key       => $git_ssh_key,
+      user      => 'git',
+      require   => File[ '/home/git/.ssh' ],
+    }
   }
 }

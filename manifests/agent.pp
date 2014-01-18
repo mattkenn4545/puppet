@@ -1,5 +1,5 @@
-class puppet::agent inherits puppet::params {
-  if $version == undef { $pin_ensure = 'absent' }
+class puppet::agent inherits puppet {
+  if $version == 'unset' { $pin_ensure = 'absent' }
   else {  $pin_ensure = 'present' }
 
   apt::pin { 'puppet':

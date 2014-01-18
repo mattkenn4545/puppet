@@ -1,9 +1,8 @@
 class puppet::master (
   $environment_dir_owner  = 'www-data',
   $autosign               = ''
-) inherits puppet::params {
-
-  if $version == undef { $pin_ensure = 'absent' }
+) inherits puppet {
+  if $version == 'unset' { $pin_ensure = 'absent' }
   else {  $pin_ensure = 'present' }
 
   apt::pin { 'puppetmaster-passenger':
