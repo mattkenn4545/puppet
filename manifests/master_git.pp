@@ -1,5 +1,5 @@
 class puppet::master_git (
-  $git_ssh_key  =   undef
+  $ssh_key  =   undef
 ) inherits puppet {
   include puppet::master
 
@@ -54,11 +54,11 @@ class puppet::master_git (
     path    => "/opt/puppet.git/hooks/post-receive",
     require => [ File[ '/opt/puppet.git' ], Exec[ 'git --bare init' ] ]
   }
-  if ($git_ssh_key) {
+  if ($ssh_key) {
     ssh_authorized_key { 'git_ssh_authorized_key':
       ensure    => present,
       type      => ssh-rsa,
-      key       => $git_ssh_key,
+      key       => $ssh_key,
       user      => 'git',
       require   => File[ '/home/git/.ssh' ]
     }

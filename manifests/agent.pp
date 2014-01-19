@@ -4,14 +4,14 @@ class puppet::agent inherits puppet::params {
     packages => 'puppet',
     version  => $version,
     priority => 1001,
-  } ->
+  }
 
   apt::pin { 'puppet-common':
     ensure   => $pin_ensure,
     packages => 'puppet-common',
     version  => $version,
     priority => 1001,
-  } ->
+  }
 
   package { 'puppet':
     ensure  => latest,
