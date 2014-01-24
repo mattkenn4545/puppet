@@ -1,5 +1,5 @@
 class puppet::master (
-  $autosign               = ''
+  $autosign               = hiera('puppet::master::autosign', '')
 ) inherits puppet::params {
   if (defined(Class[ 'puppet::master_git'])){
     $environment_dir_owner  = 'git'
