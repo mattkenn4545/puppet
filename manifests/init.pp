@@ -1,5 +1,5 @@
 class puppet (
-  $version        = undef,
+  $version        = hiera('puppet::version', undef),
   $puppetmaster   = 'puppet'
 ) {
   class { 'puppet::params':
