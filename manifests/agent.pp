@@ -1,4 +1,6 @@
-class puppet::agent inherits puppet::params {
+class puppet::agent (
+  $node_terminus          = hiera('puppet::agent::node_terminus', 'plain')
+) inherits puppet::params {
   apt::pin { 'puppet':
     ensure   => $pin_ensure,
     packages => 'puppet',
