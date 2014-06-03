@@ -9,12 +9,9 @@ class puppet::master_git (
     }
   }
 
-  ensure_packages(['rubygems'])
-
   package { 'librarian-puppet-simple':
     ensure   => 'installed',
-    provider => 'gem',
-    require  => Package['rubygems']
+    provider => 'gem'
   }
 
   user { 'git':
