@@ -3,11 +3,7 @@ class puppet::master_git (
 ) inherits puppet {
   include puppet::master
 
-  if !defined(Package[ 'git' ]) {
-    package { 'git':
-      ensure => installed
-    }
-  }
+  ensure_packages(['git'])
 
   package { 'librarian-puppet-simple':
     ensure   => 'installed',
