@@ -47,6 +47,17 @@ class puppet::master_git (
     path    => "/opt/puppet.git/hooks/post-receive",
     require => [ File[ '/opt/puppet.git' ], Exec[ 'git --bare init' ] ]
   }
+
+  file { 'pre-receive':
+    ensure  => present,
+    mode    => '0755',
+    owner   => 'git',
+    group   => 'git',
+    source  => "puppet:///modules/${module_name}/pre-receive",
+    path    => "/opt/puppet.git/hooks/pre-receive",
+    require => [ File[ '/opt/puppet.git' ], Exec[ 'git --bare init' ] ]
+  }
+
   if ($ssh_key) {
     ssh_authorized_key { 'git_ssh_authorized_key':
       ensure    => present,

@@ -1,28 +1,16 @@
 #!/usr/bin/env ruby
-# Puppet Labs is a ruby shop, so why not do the post-receive hook in ruby?
 require 'fileutils'
 
-# Set this to where you want to keep your environments
 ENVIRONMENT_BASEDIR = "/etc/puppet/environments"
-
-# post-receive hooks set GIT_DIR to the current repository. If you want to
-# clone from a non-local repository, set this to the URL of the repository,
-# such as git@git.host:puppet.git
 SOURCE_REPOSITORY = File.expand_path(ENV['GIT_DIR'])
 
-# The git_dir environment variable will override the --git-dir, so we remove it
-# to allow us to create new repositories cleanly.
 ENV.delete('GIT_DIR')
 
-# Ensure that we have the underlying directories, otherwise the later commands
-# may fail in somewhat cryptic manners.
 unless File.directory? ENVIRONMENT_BASEDIR
   puts %Q{#{ENVIRONMENT_BASEDIR} does not exist, cannot create environment directories.}
   exit 1
 end
 
-# You can push multiple refspecs at once, like 'git push origin branch1 branch2',
-# so we need to handle each one.
 $stdin.each_line do |line|
   oldrev, newrev, refname = line.split(" ")
 
@@ -65,8 +53,7 @@ $stdin.each_line do |line|
 
     Dir.chdir environment_path
     if File.file? "Puppetfile"
-        puts "Updating/Installing Modules via librarian-puppet"
-        %x{librarian-puppet clean}
+        puts "Installing modules via librarian-puppet"
         %x{librarian-puppet install}
     end
   end
