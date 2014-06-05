@@ -29,6 +29,7 @@ $stdin.each_line do |line|
     Dir.chdir environment_path
     if File.file? "Puppetfile"
       puts "Cleaning modules via librarian-puppet"
+      puts "%{oldrev}-${newrev}"
       %x{librarian-puppet clean}
     end
   end
