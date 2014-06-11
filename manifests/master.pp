@@ -29,19 +29,22 @@ class puppet::master (
 
   package { 'puppetmaster-passenger':
     ensure    => latest,
-    before    => Service[ 'puppet' ]
+    before    => Service[ 'puppet' ],
+    notify    => Service[ 'apache2' ]
   } ->
 
   file { '/etc/puppet/auth.conf':
     mode      => '0644',
     owner     => 'root',
     group     => 'root',
-    source    => "puppet:///modules/${module_name}/auth.conf"
+    source    => "puppet:///modules/${module_name}/auth.conf",
+    notify    => Service[ 'apache2' ]
   } ->
 
   file { '/etc/puppet/autosign.conf':
     ensure    => present,
-    content   => $autosign
+    content   => $autosign,
+    notify    => Service[ 'apache2' ]
   } ->
 
   file { '/etc/puppet/environments':

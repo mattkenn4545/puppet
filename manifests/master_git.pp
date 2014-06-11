@@ -49,7 +49,7 @@ class puppet::master_git (
   }
 
   file { 'pre-receive':
-    ensure  => present,
+    ensure  => absent,
     mode    => '0755',
     owner   => 'git',
     group   => 'git',

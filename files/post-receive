@@ -54,6 +54,7 @@ $stdin.each_line do |line|
     Dir.chdir environment_path
     if File.file? "Puppetfile"
         puts "Installing modules via librarian-puppet"
+        %x{librarian-puppet clean}
         %x{librarian-puppet install}
     end
   end
