@@ -13,5 +13,5 @@ class puppet (
     key_server => 'pgp.mit.edu',
   }
 
-  Exec["apt_update"] -> Package <| |>
+  Apt::Pin <| |> ~> Exec["apt_update"]  -> Package <| |>
 }
