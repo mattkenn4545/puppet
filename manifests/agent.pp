@@ -15,7 +15,7 @@ class puppet::agent (
     priority => 1001,
   }
 
-  package { [ 'puppet', 'ruby1.9.3' ]:
+  package { 'puppet':
     ensure  => 'installed',
   } ->
 
