@@ -28,7 +28,7 @@ class puppet::master (
   }
 
   package { 'puppetmaster-passenger':
-    ensure    => 'installed',
+    ensure    => 'latest',
     before    => Service[ 'puppet' ],
     notify    => Service[ 'apache2' ]
   } ->

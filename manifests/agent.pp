@@ -16,7 +16,7 @@ class puppet::agent (
   }
 
   package { 'puppet':
-    ensure  => 'installed',
+    ensure  => 'latest',
   } ->
 
   file { '/etc/puppet/puppet.conf':
