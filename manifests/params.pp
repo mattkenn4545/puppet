@@ -1,5 +1,6 @@
 class puppet::params (
-  $version
+  $version,
+  $puppetmaster
 ) {
   if !$version { $pin_ensure = 'absent' }
   else {  $pin_ensure = 'present' }

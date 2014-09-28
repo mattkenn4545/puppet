@@ -3,7 +3,8 @@ class puppet (
   $puppetmaster   = 'puppet'
 ) {
   class { 'puppet::params':
-    version   => $version
+    version       => $version,
+    puppetmaster  => $puppetmaster
   }
 
   apt::source { 'puppetlabs':

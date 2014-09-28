@@ -54,6 +54,43 @@ class puppet::master (
     group     => $environment_dir_owner
   }
 
+  ini_setting { 'puppet.conf/master/manifest':
+    ensure  => present,
+    section => 'master',
+    path    => '/etc/puppet/puppet.conf',
+    setting => 'manifest',
+    value   => '$confdir/environments/$environment/manifests/site.pp',
+    notify  => Service[ 'apache2' ]
+  }
+
+  ini_setting { 'puppet.conf/master/modulepath':
+    ensure  => present,
+    section => 'master',
+    path    => '/etc/puppet/puppet.conf',
+    setting => 'modulepath',
+    value   => '$confdir/environments/$environment/modules',
+    notify  => Service[ 'apache2' ]
+  }
+
+  ini_setting { 'puppet.conf/master/reports':
+    ensure  => present,
+    section => 'master',
+    path    => '/etc/puppet/puppet.conf',
+    setting => 'reports',
+    value   => 'store, http',
+    notify  => Service[ 'apache2' ]
+  }
+
+  #TODO This should be exported from the puppetdashboard node
+  ini_setting { 'puppet.conf/master/reporturl':
+    ensure  => present,
+    section => 'master',
+    path    => '/etc/puppet/puppet.conf',
+    setting => 'reporturl',
+    value   => "http://${puppetmaster}:3000/reports/upload",
+    notify  => Service[ 'apache2' ]
+  }
+
   cron { 'reports cleanup':
     command   => 'find /var/lib/puppet/reports/* -mtime +7 -type f -exec rm -rf {} \;',
     user      => root,
