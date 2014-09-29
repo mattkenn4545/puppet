@@ -1,6 +1,6 @@
 class puppet::ca (
   $autosign               = hiera('puppet::ca::autosign', '')
-) inherits puppet::params {
+) inherits puppet {
   include puppet::master
 
   @@puppet_config { 'main/ca_server': value => $fqdn }

@@ -1,6 +1,6 @@
-class puppet::agent inherits puppet::params {
+class puppet::agent inherits puppet {
   apt::pin { 'puppet':
-    ensure   => $pin_ensure,
+    ensure   => 'present',
     packages => 'puppet puppet-common',
     version  => $version,
     priority => 1001,
@@ -33,7 +33,8 @@ class puppet::agent inherits puppet::params {
     'agent/show_diff'           =>  { 'value' => true },
     'agent/usecacheonfailure'   =>  { 'value' => false },
     'agent/configtimeout'       =>  { 'value' => '600' },
-    'agent/splay'               =>  { 'value' => true }
+    'agent/splay'               =>  { 'value' => true },
+    'agent/pluginsync'          =>  { 'value' => true }
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'agent' })

@@ -1,5 +1,5 @@
 class puppet::master (
-) inherits puppet::params {
+) inherits puppet {
   if (defined(Class[ 'puppet::master_git'])){
     $environment_dir_owner  = 'git'
   } else {
@@ -7,7 +7,7 @@ class puppet::master (
   }
 
   apt::pin { 'puppetmaster':
-    ensure    => $pin_ensure,
+    ensure    => 'present',
     packages  => 'puppetmaster-common puppetmaster-passenger',
     version   => $version,
     priority  => 1001

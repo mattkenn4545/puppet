@@ -2,11 +2,6 @@ class puppet (
   $version        = hiera('puppet::version', undef),
   $puppetmaster   = 'puppet'
 ) {
-  class { 'puppet::params':
-    version       => $version,
-    puppetmaster  => $puppetmaster
-  }
-
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com',
     repos      => 'main dependencies',
