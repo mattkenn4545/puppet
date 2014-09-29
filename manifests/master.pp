@@ -1,5 +1,4 @@
 class puppet::master (
-  $autosign               = hiera('puppet::master::autosign', '')
 ) inherits puppet::params {
   if (defined(Class[ 'puppet::master_git'])){
     $environment_dir_owner  = 'git'
@@ -7,28 +6,15 @@ class puppet::master (
     $environment_dir_owner  = 'www-data'
   }
 
-  host { 'puppet':
-    ensure    => present,
-    ip        => '127.0.1.1',
-    before    => Service[ 'puppet' ]
-  }
-
-  apt::pin { 'puppetmaster-passenger':
+  apt::pin { 'puppetmaster':
     ensure    => $pin_ensure,
-    packages  => 'puppetmaster-passenger',
-    version   => $version,
-    priority  => 1001
-  }
-
-  apt::pin { 'puppetmaster-common':
-    ensure    => $pin_ensure,
-    packages  => 'puppetmaster-common',
+    packages  => 'puppetmaster-common puppetmaster-passenger',
     version   => $version,
     priority  => 1001
   }
 
   package { 'puppetmaster-passenger':
-    ensure    => 'latest',
+    ensure    => 'installed',
     before    => Service[ 'puppet' ],
     notify    => Service[ 'apache2' ]
   } ->
@@ -41,54 +27,26 @@ class puppet::master (
     notify    => Service[ 'apache2' ]
   } ->
 
-  file { '/etc/puppet/autosign.conf':
-    ensure    => present,
-    content   => $autosign,
-    notify    => Service[ 'apache2' ]
-  } ->
-
   file { '/etc/puppet/environments':
     ensure    => directory,
     mode      => '0755',
     owner     => $environment_dir_owner,
     group     => $environment_dir_owner
+  } -> Puppet_config <| tag == 'master' |> ~> Service[ 'apache2' ]
+
+  $config = {
+    'master/ssl_client_header'            =>  { 'value' => 'SSL_CLIENT_S_DN' },
+    'master/ssl_client_verify_header'     =>  { 'value' => 'SSL_CLIENT_VERIFY' },
+    'master/manifest'                     =>  { 'value' => '$confdir/environments/$environment/manifests/site.pp' },
+    'master/modulepath'                   =>  { 'value' => '$confdir/environments/$environment/modules' },
+    'master/reports'                      =>  { 'value' => 'store, http' },
+    'master/reporturl'                    =>  { 'value' => "http://${puppetmaster}:3000/reports/upload" }
   }
 
-  ini_setting { 'puppet.conf/master/manifest':
-    ensure  => present,
-    section => 'master',
-    path    => '/etc/puppet/puppet.conf',
-    setting => 'manifest',
-    value   => '$confdir/environments/$environment/manifests/site.pp',
-    notify  => Service[ 'apache2' ]
-  }
+  create_resources('puppet_config', $config, { 'tag' => 'master' })
 
-  ini_setting { 'puppet.conf/master/modulepath':
-    ensure  => present,
-    section => 'master',
-    path    => '/etc/puppet/puppet.conf',
-    setting => 'modulepath',
-    value   => '$confdir/environments/$environment/modules',
-    notify  => Service[ 'apache2' ]
-  }
-
-  ini_setting { 'puppet.conf/master/reports':
-    ensure  => present,
-    section => 'master',
-    path    => '/etc/puppet/puppet.conf',
-    setting => 'reports',
-    value   => 'store, http',
-    notify  => Service[ 'apache2' ]
-  }
-
-  #TODO This should be exported from the puppetdashboard node
-  ini_setting { 'puppet.conf/master/reporturl':
-    ensure  => present,
-    section => 'master',
-    path    => '/etc/puppet/puppet.conf',
-    setting => 'reporturl',
-    value   => "http://${puppetmaster}:3000/reports/upload",
-    notify  => Service[ 'apache2' ]
+  puppet_config { 'main/dns_alt_names':
+    value => "puppet,puppet.${domain}"
   }
 
   cron { 'reports cleanup':
