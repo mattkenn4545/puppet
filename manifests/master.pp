@@ -39,14 +39,22 @@ class puppet::master (
     'master/ssl_client_verify_header'     =>  { 'value' => 'SSL_CLIENT_VERIFY' },
     'master/manifest'                     =>  { 'value' => '$confdir/environments/$environment/manifests/site.pp' },
     'master/modulepath'                   =>  { 'value' => '$confdir/environments/$environment/modules' },
-    'master/reports'                      =>  { 'value' => 'store, http' },
-    'master/reporturl'                    =>  { 'value' => "http://${puppetmaster}:3000/reports/upload" }
+    'master/reports'                      =>  { 'value' => 'store, http' } #Will have the http bit removed soon
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'master' })
 
   puppet_config { 'main/dns_alt_names':
     value => "puppet,puppet.${domain}"
+  }
+
+  #This is not working, not sure why yet
+  Puppet_config <<| title == 'master/reporturl' |>>
+
+  if (defined(Puppet_config[ 'master/reporturl' ])) {
+    Puppet_config<| title == 'master/reports' |> {
+      value => 'store, http'
+    }
   }
 
   cron { 'reports cleanup':

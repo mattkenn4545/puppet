@@ -3,6 +3,8 @@ class puppet::ca (
 ) inherits puppet {
   include puppet::master
 
+  puppet_config { 'master/ca': value => true }
+
   @@puppet_config { 'main/ca_server': value => $fqdn }
 
   file { '/etc/puppet/autosign.conf':
