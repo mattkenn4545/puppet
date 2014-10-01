@@ -1,4 +1,5 @@
 class puppet::master (
+  $dns_alt_names    =  "puppet,puppet.${domain}"
 ) inherits puppet {
   if (defined(Class[ 'puppet::master_git'])){
     $environment_dir_owner  = 'git'
@@ -45,17 +46,11 @@ class puppet::master (
   create_resources('puppet_config', $config, { 'tag' => 'master' })
 
   puppet_config { 'main/dns_alt_names':
-    value => "puppet,puppet.${domain}"
+    value => $dns_alt_names,
+    tag   => 'master'
   }
 
-  #This is not working, not sure why yet
   Puppet_config <<| title == 'master/reporturl' |>>
-
-  if (defined(Puppet_config[ 'master/reporturl' ])) {
-    Puppet_config<| title == 'master/reports' |> {
-      value => 'store, http'
-    }
-  }
 
   cron { 'reports cleanup':
     command   => 'find /var/lib/puppet/reports/* -mtime +7 -type f -exec rm -rf {} \;',
