@@ -5,7 +5,7 @@ class puppet::ca (
 
   puppet_config { 'master/ca': value => true }
 
-  @@puppet_config { 'main/ca_server': value => $fqdn }
+  @@puppet_config { 'main/ca_server': value => $hostname }
 
   file { '/etc/puppet/autosign.conf':
     ensure    => present,
