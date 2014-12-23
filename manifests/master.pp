@@ -20,37 +20,31 @@ class puppet::master (
     notify    => Service[ 'apache2' ]
   } ->
 
-  file { '/etc/puppet/auth.conf':
-    mode      => '0644',
-    owner     => 'root',
-    group     => 'root',
-    source    => "puppet:///modules/${module_name}/auth.conf",
-    notify    => Service[ 'apache2' ]
-  } ->
-
   file { '/etc/puppet/environments':
     ensure    => directory,
     mode      => '0755',
     owner     => $environment_dir_owner,
     group     => $environment_dir_owner
-  } -> Puppet_config <| tag == 'master' |> ~> Service[ 'apache2' ]
+  }
 
   $config = {
-    'master/ssl_client_header'            =>  { 'value' => 'SSL_CLIENT_S_DN' },
-    'master/ssl_client_verify_header'     =>  { 'value' => 'SSL_CLIENT_VERIFY' },
-    'master/manifest'                     =>  { 'value' => '$confdir/environments/$environment/manifests/site.pp' },
-    'master/modulepath'                   =>  { 'value' => '$confdir/environments/$environment/modules' },
-    'master/reports'                      =>  { 'value' => 'store, http' } #Will have the http bit removed soon
+#    'master/always_cache_features'        =>  { 'value' => 'true' }, # TODO We prob want this turned on
+    'master/environment_timeout'          =>  { 'value' => '2s' },
+    'master/filetimeout'                  =>  { 'value' => '2s' },
+    'master/ignorecache'                  =>  { 'value' => 'true' },  # Turn this to false when live
+    'master/environmentpath'              =>  { 'value' => '$confdir/environments' },
+    'master/reports'                      =>  { 'value' => 'store, http' } # Will have the http bit removed soon
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'master' })
 
-  puppet_config { 'main/dns_alt_names':
-    value => $dns_alt_names,
-    tag   => 'master'
-  }
+  puppet_config { 'main/dns_alt_names':   value => $dns_alt_names,  tag   => 'master' }
 
   Puppet_config <<| title == 'master/reporturl' |>>
+
+  Puppet_config <| tag == 'master' |> {
+    notify => Service[ 'apache2' ]
+  }
 
   cron { 'reports cleanup':
     command   => 'find /var/lib/puppet/reports/* -mtime +7 -type f -exec rm -rf {} \;',

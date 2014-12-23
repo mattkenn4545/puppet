@@ -15,17 +15,20 @@ class puppet::agent inherits puppet {
     path    => '/etc/default/puppet',
     section => '',
     setting => 'START',
-    value   => 'yes',
-    notify  => Service[ 'puppet' ]
-  } -> Puppet_config <| tag == 'agent' |> ~> Service[ 'puppet' ]
+    value   => 'yes'
+  } ~>
+
+  service { 'puppet':
+    enable      => true,
+    ensure      => running,
+    hasrestart  => true
+  }
 
   $config = {
     'main/logdir'               =>  { 'value' => '/var/log/puppet' },
     'main/vardir'               =>  { 'value' => '/var/lib/puppet' },
     'main/ssldir'               =>  { 'value' => '/var/lib/puppet/ssl' },
     'main/rundir'               =>  { 'value' => '/var/run/puppet' },
-    'main/factpath'             =>  { 'value' => '$vardir/lib/facter' },
-    'main/templatedir'          =>  { 'value' => '$confdir/templates' },
     'main/environment'          =>  { 'value' => 'production' },
     'main/server'               =>  { 'value' => $puppetmaster },
 
@@ -41,10 +44,8 @@ class puppet::agent inherits puppet {
 
   Puppet_config <<| title == 'main/ca_server' |>>
 
-  service { 'puppet':
-    enable      => true,
-    ensure      => running,
-    hasrestart  => true
+  Puppet_config <| tag == 'agent' |> {
+    notify => Service[ 'puppet' ]
   }
 
   file { 'runpuppet':
