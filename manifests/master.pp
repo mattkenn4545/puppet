@@ -28,12 +28,12 @@ class puppet::master (
   }
 
   $config = {
-#    'master/always_cache_features'        =>  { 'value' => 'true' }, # TODO We prob want this turned on
+    'master/always_cache_features'        =>  { 'value' => 'true' },
     'master/environment_timeout'          =>  { 'value' => '2s' },
     'master/filetimeout'                  =>  { 'value' => '2s' },
-    'master/ignorecache'                  =>  { 'value' => 'true' },  # Turn this to false when live
+    'master/ignorecache'                  =>  { 'value' => 'true' },                    # Turn this to false when live
     'master/environmentpath'              =>  { 'value' => '$confdir/environments' },
-    'master/reports'                      =>  { 'value' => 'store, http' } # Will have the http bit removed soon
+    'master/reports'                      =>  { 'value' => 'store, http' }
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'master' })
