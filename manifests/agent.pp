@@ -25,19 +25,20 @@ class puppet::agent inherits puppet {
   }
 
   $config = {
-    'main/logdir'               =>  { 'value' => '/var/log/puppet' },
-    'main/vardir'               =>  { 'value' => '/var/lib/puppet' },
-    'main/ssldir'               =>  { 'value' => '/var/lib/puppet/ssl' },
-    'main/rundir'               =>  { 'value' => '/var/run/puppet' },
-    'main/environment'          =>  { 'value' => 'production' },
-    'main/server'               =>  { 'value' => $puppetmaster },
+    'main/logdir'                   =>  { 'value' => '/var/log/puppet' },
+    'main/vardir'                   =>  { 'value' => '/var/lib/puppet' },
+    'main/ssldir'                   =>  { 'value' => '/var/lib/puppet/ssl' },
+    'main/rundir'                   =>  { 'value' => '/var/run/puppet' },
+    'main/environment'              =>  { 'value' => 'production' },
+    'main/server'                   =>  { 'value' => $puppetmaster },
 
-    'agent/report'              =>  { 'value' => true },
-    'agent/show_diff'           =>  { 'value' => true },
-    'agent/usecacheonfailure'   =>  { 'value' => false },
-    'agent/configtimeout'       =>  { 'value' => '600' },
-    'agent/splay'               =>  { 'value' => true },
-    'agent/pluginsync'          =>  { 'value' => true }
+    'agent/always_cache_features'   =>  { 'value' => 'false' },
+    'agent/report'                  =>  { 'value' => true },
+    'agent/show_diff'               =>  { 'value' => true },
+    'agent/usecacheonfailure'       =>  { 'value' => false },
+    'agent/configtimeout'           =>  { 'value' => '600' },
+    'agent/splay'                   =>  { 'value' => true },
+    'agent/pluginsync'              =>  { 'value' => true }
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'agent' })

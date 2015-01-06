@@ -1,5 +1,5 @@
 class puppet::ca (
-  $autosign               = hiera('puppet::ca::autosign', '')
+  $autosign   =  ''
 ) inherits puppet {
   include puppet::master
 

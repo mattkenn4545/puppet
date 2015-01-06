@@ -1,7 +1,7 @@
 class puppet (
-  $version        = hiera('puppet::version',        undef),
-  $puppetmaster   = hiera('puppet::puppetmaster',   'puppet'),
-  $purge_config   = hiera('puppet::purge_config',   true)
+  $version        = undef,
+  $puppetmaster   = 'puppet',
+  $purge_config   = true
 ) {
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com',

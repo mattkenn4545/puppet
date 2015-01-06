@@ -28,12 +28,15 @@ class puppet::master (
   }
 
   $config = {
+    'master/ssl_client_header'            =>  { 'value' => 'SSL_CLIENT_S_DN' },
+    'master/ssl_client_verify_header'     =>  { 'value' => 'SSL_CLIENT_VERIFY' },
+
     'master/always_cache_features'        =>  { 'value' => 'true' },
     'master/environment_timeout'          =>  { 'value' => '2s' },
     'master/filetimeout'                  =>  { 'value' => '2s' },
     'master/ignorecache'                  =>  { 'value' => 'true' },                    # Turn this to false when live
     'master/environmentpath'              =>  { 'value' => '$confdir/environments' },
-    'master/reports'                      =>  { 'value' => 'store, http' }
+#    'master/reports'                      =>  { 'value' => 'store, http' }
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'master' })
