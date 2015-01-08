@@ -6,6 +6,11 @@ class puppet::agent inherits puppet {
     priority => 1001,
   }
 
+  # Needed to make factor work with 14.04
+  package { 'update-notifier':
+    ensure  => 'installed'
+  }
+
   package { 'puppet':
     ensure  => 'latest',
   } ->
