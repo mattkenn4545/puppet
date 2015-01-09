@@ -7,7 +7,7 @@ class puppet::agent inherits puppet {
   }
 
   # Needed to make factor work with 14.04
-  package { 'update-notifier':
+  package { 'update-notifier-common':
     ensure  => 'installed'
   } ~> Service [ 'puppet' ]
 
