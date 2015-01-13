@@ -29,7 +29,7 @@ class puppet::master (
 
   file { '/etc/apache2/sites-available/puppetmaster.conf':
     ensure    => 'present',
-    source    => "puppet:///modules/${module_name}/puppetmaster.conf",
+    content   => template("${module_name}/puppetmaster.conf.erb"),
     notify    => Service[ 'apache2' ]
   }
 
