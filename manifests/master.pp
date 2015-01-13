@@ -27,6 +27,12 @@ class puppet::master (
     group     => $environment_dir_owner
   }
 
+  file { '/etc/apache2/sites-available/puppetmaster.conf':
+    ensure    => 'present',
+    source    => "puppet:///modules/${module_name}/puppetmaster.conf",
+    notify    => Service[ 'apache2' ]
+  }
+
   $config = {
     'master/ssl_client_header'            =>  { 'value' => 'SSL_CLIENT_S_DN' },
     'master/ssl_client_verify_header'     =>  { 'value' => 'SSL_CLIENT_VERIFY' },
