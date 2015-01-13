@@ -1,5 +1,5 @@
 class puppet::master (
-  $dns_alt_names    =  "puppet,puppet.${domain}"
+  $dns_alt_names    =  "puppet"
 ) inherits puppet {
   if (defined(Class[ 'puppet::master_git'])){
     $environment_dir_owner  = 'git'
