@@ -42,14 +42,12 @@ class puppet::master (
     'master/filetimeout'                  =>  { 'value' => '2s' },
     'master/ignorecache'                  =>  { 'value' => 'true' },                    # Turn this to false when live
     'master/environmentpath'              =>  { 'value' => '$confdir/environments' },
-#    'master/reports'                      =>  { 'value' => 'store, http' }
+    'master/reports'                      =>  { 'value' => 'store, puppetdb' }
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'master' })
 
   puppet_config { 'main/dns_alt_names':   value => $dns_alt_names,  tag   => 'master' }
-
-  Puppet_config <<| title == 'master/reporturl' |>>
 
   Puppet_config <| tag == 'master' |> {
     notify => Service[ 'apache2' ]
