@@ -16,5 +16,5 @@ class puppet (
     }
   }
 
-  Apt::Pin <| |> ~> Exec["apt_update"]  -> Package <| title != 'software-properties-common' |>
+#  Apt::Pin <| |> ~> Exec["apt_update"]  -> Package <| title != 'software-properties-common' |>
 }
