@@ -36,6 +36,7 @@ class puppet::agent inherits puppet {
     'main/rundir'                   =>  { 'value' => '/var/run/puppet' },
     'main/environment'              =>  { 'value' => 'production' },
     'main/server'                   =>  { 'value' => $puppetmaster },
+    'main/http_keepalive_timeout'   =>  { 'value' => '25' },
 
     'agent/always_cache_features'   =>  { 'value' => 'false' },
     'agent/report'                  =>  { 'value' => true },
