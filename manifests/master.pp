@@ -7,6 +7,11 @@ class puppet::master (
     $environment_dir_owner  = 'www-data'
   }
 
+  package { 'deep_merge':
+    provider  => 'gem',
+    ensure    => 'installed'
+  }
+
   apt::pin { 'puppetmaster':
     ensure    => 'present',
     packages  => 'puppetmaster-common puppetmaster-passenger',
