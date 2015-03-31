@@ -12,7 +12,8 @@ class puppet::agent inherits puppet {
   } ~> Service [ 'puppet' ]
 
   package { 'puppet':
-    ensure  => 'latest',
+    ensure            => 'latest',
+    install_options   => '--force-yes'
   } ->
 
   ini_setting { 'enablepuppet':
