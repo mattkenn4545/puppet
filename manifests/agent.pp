@@ -35,7 +35,7 @@ class puppet::agent inherits puppet {
     'main/vardir'                   =>  { 'value' => '/var/lib/puppet' },
     'main/ssldir'                   =>  { 'value' => '/var/lib/puppet/ssl' },
     'main/rundir'                   =>  { 'value' => '/var/run/puppet' },
-    'main/environment'              =>  { 'value' => 'production' },
+    'main/environment'              =>  { 'value' => $env },
     'main/server'                   =>  { 'value' => $puppetmaster },
     'main/http_keepalive_timeout'   =>  { 'value' => '25' },
 

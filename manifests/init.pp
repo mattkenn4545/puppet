@@ -1,7 +1,8 @@
 class puppet (
   $version        = undef,
   $puppetmaster   = 'puppet',
-  $purge_config   = true
+  $purge_config   = true,
+  $env            = 'production'
 ) {
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com',
