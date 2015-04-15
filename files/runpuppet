@@ -1,0 +1,8 @@
+#!/bin/bash
+
+ENVIRONMENT_STR=""
+if (( $# == 1 )); then
+  ENVIRONMENT_STR="--environment ${1}"
+fi
+
+sudo puppet agent --verbose --no-daemonize --onetime --no-splay ${ENVIRONMENT_STR}

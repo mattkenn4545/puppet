@@ -60,7 +60,7 @@ class puppet::agent inherits puppet {
     path    => '/bin/runpuppet',
     owner   => 'root',
     mode    => '0755',
-    content => 'sudo puppet agent --verbose --no-daemonize --onetime --no-splay',
+    source  => "puppet:///modules/${module_name}/runpuppet"
   }
 
   file { 'debugpuppet':
