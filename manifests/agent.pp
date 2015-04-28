@@ -39,6 +39,7 @@ class puppet::agent inherits puppet {
     'main/server'                   =>  { 'value' => $puppetmaster },
     'main/http_keepalive_timeout'   =>  { 'value' => '25' },
 
+    'agent/runinterval'             =>  { 'value' => '45m' },
     'agent/always_cache_features'   =>  { 'value' => 'false' },
     'agent/report'                  =>  { 'value' => true },
     'agent/show_diff'               =>  { 'value' => true },
