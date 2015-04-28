@@ -1,5 +1,6 @@
 class puppet::master (
-  $dns_alt_names    =  "puppet"
+  $dns_alt_names            =  "puppet",
+  $passenger_max_pool_size  = 12
 ) inherits puppet {
   if (defined(Class[ 'puppet::master_git'])){
     $environment_dir_owner  = 'git'
