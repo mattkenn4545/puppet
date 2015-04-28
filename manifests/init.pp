@@ -7,7 +7,7 @@ class puppet (
   apt::source { 'puppetlabs':
     location   => 'http://apt.puppetlabs.com',
     repos      => 'main dependencies',
-    key        => '4BD6EC30',
+    key        => '1054B7A24BD6EC30',
     key_server => 'pgp.mit.edu',
   }
 
