@@ -1,4 +1,7 @@
-class puppet::agent inherits puppet {
+class puppet::agent (
+  $runinterval    = '30m',
+  $configtimeout  = '600'
+) inherits puppet  {
   apt::pin { 'puppet':
     ensure   => 'present',
     packages => 'puppet puppet-common',
@@ -39,12 +42,12 @@ class puppet::agent inherits puppet {
     'main/server'                   =>  { 'value' => $puppetmaster },
     'main/http_keepalive_timeout'   =>  { 'value' => '25' },
 
-    'agent/runinterval'             =>  { 'value' => '45m' },
+    'agent/runinterval'             =>  { 'value' => $runinterval },
     'agent/always_cache_features'   =>  { 'value' => 'false' },
     'agent/report'                  =>  { 'value' => true },
     'agent/show_diff'               =>  { 'value' => true },
     'agent/usecacheonfailure'       =>  { 'value' => false },
-    'agent/configtimeout'           =>  { 'value' => '600' },
+    'agent/configtimeout'           =>  { 'value' => $configtimeout },
     'agent/splay'                   =>  { 'value' => true },
     'agent/pluginsync'              =>  { 'value' => true }
   }
