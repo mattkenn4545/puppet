@@ -19,6 +19,10 @@ class puppet::agent (
     install_options   => '--force-yes'
   } ->
 
+  package { 'cfacter':
+    ensure            => 'installed'
+  } ->
+
   ini_setting { 'enablepuppet':
     ensure  => present,
     path    => '/etc/default/puppet',
@@ -49,7 +53,8 @@ class puppet::agent (
     'agent/usecacheonfailure'       =>  { 'value' => false },
     'agent/configtimeout'           =>  { 'value' => $configtimeout },
     'agent/splay'                   =>  { 'value' => true },
-    'agent/pluginsync'              =>  { 'value' => true }
+    'agent/pluginsync'              =>  { 'value' => true },
+    'agent/cfacter'                 =>  { 'value' => true }
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'agent' })
