@@ -23,12 +23,9 @@ class puppet::agent (
     ensure            => 'installed'
   } ->
 
-  ini_setting { 'enablepuppet':
-    ensure  => present,
-    path    => '/etc/default/puppet',
-    section => '',
-    setting => 'START',
-    value   => 'yes'
+  file { '/etc/default/puppet':
+    ensure    => 'present',
+    content   => 'START=true'
   } ~>
 
   service { 'puppet':
