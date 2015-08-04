@@ -44,10 +44,11 @@ class puppet::agent (
     'main/http_keepalive_timeout'   =>  { 'value' => '25' },
 
     'agent/runinterval'             =>  { 'value' => $runinterval },
-    'agent/always_cache_features'   =>  { 'value' => 'false' },
+    'agent/always_cache_features'   =>  { 'value' => false },
+    'agent/ignorecache'             =>  { 'value' => true },
+    'agent/usecacheonfailure'       =>  { 'value' => false },
     'agent/report'                  =>  { 'value' => true },
     'agent/show_diff'               =>  { 'value' => true },
-    'agent/usecacheonfailure'       =>  { 'value' => false },
     'agent/configtimeout'           =>  { 'value' => $configtimeout },
     'agent/splay'                   =>  { 'value' => true },
     'agent/pluginsync'              =>  { 'value' => true },

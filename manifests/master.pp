@@ -44,9 +44,8 @@ class puppet::master (
     'master/ssl_client_verify_header'     =>  { 'value' => 'SSL_CLIENT_VERIFY' },
 
     'master/always_cache_features'        =>  { 'value' => 'true' },
-    'master/environment_timeout'          =>  { 'value' => '15s' },
-    'master/filetimeout'                  =>  { 'value' => '15s' },
-    'master/ignorecache'                  =>  { 'value' => 'true' },                    # Turn this to false when live
+    'master/environment_timeout'          =>  { 'value' => '0' },
+    'master/filetimeout'                  =>  { 'value' => '60s' },
     'master/environmentpath'              =>  { 'value' => '$confdir/environments' },
     'master/reports'                      =>  { 'value' => 'store, puppetdb' }
   }
