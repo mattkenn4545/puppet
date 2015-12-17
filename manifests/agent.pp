@@ -11,22 +11,26 @@ class puppet::agent (
 
   # Needed to make factor work with 14.04
   package { 'update-notifier-common':
-    ensure  => 'installed'
-  } ~> Service [ 'puppet' ]
+    ensure            => 'installed',
+    notify            => Service[ 'puppet' ]
+  }
 
   package { 'puppet':
     ensure            => 'latest',
-    install_options   => '--force-yes'
+    install_options   => '--force-yes',
+    notify            => Service[ 'puppet' ]
   } ->
 
   package { 'cfacter':
-    ensure            => 'installed'
+    ensure            => 'latest',
+    notify            => Service[ 'puppet' ]
   } ->
 
   file { '/etc/default/puppet':
-    ensure    => 'present',
-    content   => 'START=true'
-  } ~>
+    ensure            => 'present',
+    content           => 'START=true',
+    notify            => Service[ 'puppet' ]
+  }
 
   service { 'puppet':
     enable      => true,
