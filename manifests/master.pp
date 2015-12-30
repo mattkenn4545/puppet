@@ -1,6 +1,7 @@
 class puppet::master (
   $dns_alt_names            =  "puppet",
-  $passenger_max_pool_size  = 12
+  $passenger_max_pool_size  = 12,
+  $environment_timeout      = '0'
 ) inherits puppet {
   if (defined(Class[ 'puppet::master_git'])){
     $environment_dir_owner  = 'git'
@@ -44,7 +45,7 @@ class puppet::master (
     'master/ssl_client_verify_header'     =>  { 'value' => 'SSL_CLIENT_VERIFY' },
 
     'master/always_cache_features'        =>  { 'value' => 'true' },
-    'master/environment_timeout'          =>  { 'value' => '0' },
+    'master/environment_timeout'          =>  { 'value' => $environment_timeout },
     'master/filetimeout'                  =>  { 'value' => '60s' },
     'master/environmentpath'              =>  { 'value' => '$confdir/environments' },
     'master/reports'                      =>  { 'value' => 'store, puppetdb' }
