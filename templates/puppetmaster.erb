@@ -1,0 +1,91 @@
+upstream puppetmaster {
+    server 127.0.0.1:8141;
+}
+
+proxy_cache_path /var/cache/nginx levels=2 keys_zone=puppetmaster:10m max_size=1024m inactive=30m;
+
+passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;
+passenger_ruby /usr/bin/passenger_free_ruby;
+
+passenger_max_pool_size     <%= @passenger_max_pool_size %>;
+passenger_min_instances     1;
+
+client_max_body_size        500M;
+
+server {
+    listen                      8141;
+    root                        /var/www/puppetmaster/public;
+
+    passenger_enabled           on;
+    passenger_env_var           PATH /usr/sbin:/usr/bin:/sbin:/bin;
+    passenger_user              puppet;
+    passenger_group             puppet;
+
+    location / {
+        allow   127.0.0.1;
+        deny    all;
+    }
+}
+
+server {
+    listen                      8140;
+    root                        /var/www/puppetmaster/public;
+
+    ssl                         on;
+    ssl_certificate             /var/lib/puppet/ssl/certs/<%= @fqdn %>.pem;
+    ssl_certificate_key         /var/lib/puppet/ssl/private_keys/<%= @fqdn %>.pem;
+    ssl_client_certificate      /var/lib/puppet/ssl/ca/ca_crt.pem;
+    ssl_prefer_server_ciphers   on;
+    ssl_verify_client           optional;
+    ssl_verify_depth            1;
+    ssl_ciphers                 EDH+CAMELLIA:EDH+aRSA:EECDH+aRSA+AESGCM:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH:+CAMELLIA256:+AES256:+CAMELLIA128:+AES128:+SSLv3:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!DSS:!RC4:!SEED:!IDEA:!ECDSA:kEDH:CAMELLIA256-SHA:AES256-SHA:CAMELLIA128-SHA:AES128-SHA;
+    ssl_session_cache           shared:SSL:10m;
+    ssl_session_timeout         5m;
+
+    proxy_read_timeout          300s;
+    proxy_send_timeout          300s;
+
+    proxy_set_header            Host             $host;
+    proxy_set_header            X-Client-Verify  $ssl_client_verify;
+    proxy_set_header            X-Client-DN      $ssl_client_s_dn;
+    proxy_set_header            X-SSL-Subject    $ssl_client_s_dn;
+    proxy_set_header            X-SSL-Issuer     $ssl_client_i_dn;
+    proxy_redirect              off;
+
+    passenger_enabled           off;
+
+    location / {
+        proxy_pass              http://puppetmaster;
+    }
+
+    # Cache the 'file' endpoints, these need to be invalidated if code is deployed
+    location ~ ^/[a-z0-9]+/file_(metadatas?|content) {
+        proxy_pass              http://puppetmaster;
+
+        proxy_cache             puppetmaster;
+        proxy_cache_valid       200 302 60m;
+        proxy_cache_valid       404 1m;
+    }
+
+    # Disable buffering for 'big' endpoints, marginally improves latency.
+    location ~ ^/[a-z0-9]+/(catalog|report|node) {
+        proxy_pass              http://puppetmaster;
+
+        types { }
+        default_type application/x-raw;
+
+        proxy_buffering         off;
+    }
+
+    location /cache_purge {
+        limit_except POST {
+            allow 127.0.0.1;
+            deny all;
+        }
+
+        content_by_lua '
+            os.execute("rm -rf /var/cache/nginx/*")
+            ngx.status = 204
+        ';
+    }
+}
