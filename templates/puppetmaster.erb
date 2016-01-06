@@ -34,7 +34,7 @@ server {
     ssl                         on;
     ssl_certificate             /var/lib/puppet/ssl/certs/<%= @fqdn %>.pem;
     ssl_certificate_key         /var/lib/puppet/ssl/private_keys/<%= @fqdn %>.pem;
-    ssl_client_certificate      /var/lib/puppet/ssl/ca/ca_crt.pem;
+    ssl_client_certificate      /var/lib/puppet/ssl/certs/ca.pem;
     ssl_prefer_server_ciphers   on;
     ssl_verify_client           optional;
     ssl_verify_depth            1;

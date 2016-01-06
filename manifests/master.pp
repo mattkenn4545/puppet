@@ -76,8 +76,8 @@ class puppet::master (
   file { '/etc/apache2/sites-enabled/puppetmaster.conf':
     ensure      => 'absent'
   }
-  package { 'apache2':
-    ensure      => 'absent'
+  package { [ 'apache2', 'apache2-bin', 'apache2-data', 'libapache2-mod-passenger' ]:
+    ensure      => 'purged'
   }
 
   cron { 'reports cleanup':
