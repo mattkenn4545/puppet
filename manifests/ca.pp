@@ -10,7 +10,7 @@ class puppet::ca (
   file { '/etc/puppet/autosign.conf':
     ensure    => present,
     content   => $autosign,
-    notify    => Service[ 'apache2' ],
-    require   => Package[ 'puppetmaster-passenger' ]
+    notify    => Service[ 'nginx' ],
+    require   => Package[ 'puppetmaster-common' ]
   }
 }
