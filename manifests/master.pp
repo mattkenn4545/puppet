@@ -54,6 +54,12 @@ class puppet::master (
     notify      => Service[ 'nginx' ]
   }
 
+  service { 'nginx':
+    ensure        => 'running',
+    enable        => true,
+    hasrestart    => true
+  }
+
   $config = {
 #    'master/ssl_client_header'            =>  { 'value' => 'SSL_CLIENT_S_DN' },
 #    'master/ssl_client_verify_header'     =>  { 'value' => 'SSL_CLIENT_VERIFY' },
