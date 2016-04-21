@@ -19,8 +19,7 @@ class puppet::master (
     ensure      => 'present',
     packages    => 'puppetmaster-common',
     version     => $version,
-    priority    => 1001,
-    require     => Exec [ 'apt_update' ]
+    priority    => 1001
   }
 
   file { '/etc/puppet/environments':
@@ -32,8 +31,7 @@ class puppet::master (
   }
 
   package { [ 'nginx-extras', 'passenger', 'puppetmaster-common' ]:
-    ensure      => 'installed',
-    require     => Exec [ 'apt_update' ]
+    ensure      => 'installed'
   } ->
   file { '/var/www':
     ensure      => 'directory'

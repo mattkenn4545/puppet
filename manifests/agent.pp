@@ -18,14 +18,12 @@ class puppet::agent (
   package { 'puppet':
     ensure            => 'latest',
     install_options   => '--force-yes',
-    notify            => Service[ 'puppet' ],
-    require           => Exec [ 'apt_update' ]
+    notify            => Service[ 'puppet' ]
   } ->
 
   package { 'cfacter':
     ensure            => 'latest',
-    notify            => Service[ 'puppet' ],
-    require           => Exec [ 'apt_update' ]
+    notify            => Service[ 'puppet' ]
   } ->
 
   file { '/etc/default/puppet':
