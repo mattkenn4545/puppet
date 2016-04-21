@@ -17,5 +17,5 @@ class puppet (
     }
   }
 
-  Exec["apt_update"] -> Package <| title != 'software-properties-common' |>
+  #Exec["apt_update"] -> Package <| title != 'software-properties-common' |>
 }
