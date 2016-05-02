@@ -1,7 +1,8 @@
 class puppet::master (
   $dns_alt_names            =  'puppet',
   $passenger_max_pool_size  = 12,
-  $environment_timeout      = '0'
+  $environment_timeout      = '0',
+  $cache_file_endpoints     = true
 ) inherits puppet {
   package { 'deep_merge':
     provider    => 'gem',

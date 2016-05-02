@@ -64,6 +64,7 @@ server {
         proxy_pass              http://puppetmaster;
     }
 
+<%- if @cache_file_endpoints -%>
     # Cache the 'file' endpoints, these need to be invalidated if code is deployed
     location ~ ^/[a-z0-9]+/file_(metadatas?|content) {
         proxy_pass              http://puppetmaster;
@@ -82,6 +83,7 @@ server {
 
         proxy_buffering         off;
     }
+<%- end -%>
 
     location /cache_purge {
         limit_except POST {
