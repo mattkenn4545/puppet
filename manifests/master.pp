@@ -68,7 +68,8 @@ class puppet::master (
     'master/always_cache_features'        =>  { 'value' => 'true' },
     'master/environment_timeout'          =>  { 'value' => $environment_timeout },
     'master/environmentpath'              =>  { 'value' => '$confdir/environments' },
-    'master/reports'                      =>  { 'value' => 'store, puppetdb' }
+    'master/reports'                      =>  { 'value' => 'store, puppetdb' },
+#    'master/profile'                      =>  { 'value' => 'true' }
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'master' })

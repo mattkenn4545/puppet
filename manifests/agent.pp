@@ -58,7 +58,21 @@ class puppet::agent (
     'agent/configtimeout'           =>  { 'value' => $configtimeout },
     'agent/splay'                   =>  { 'value' => true },
     'agent/pluginsync'              =>  { 'value' => true },
-    'agent/cfacter'                 =>  { 'value' => true }
+    'agent/cfacter'                 =>  { 'value' => true },
+    'agent/catalog_cache_terminus'  =>  { 'value' => '' }
+  }
+
+  tidy { '/var/lib/puppet/client_data':
+    age       => 0,
+    recurse   => true,
+    backup    => false
+  }
+
+  tidy { '/var/lib/puppet/clientbucket':
+    age       => '2w',
+    recurse   => true,
+    rmdirs    => true,
+    backup    => false
   }
 
   create_resources('puppet_config', $config, { 'tag' => 'agent' })

@@ -8,6 +8,7 @@ $0 = "master"
 
 # if you want debugging:
 # ARGV << "--debug"
+# ARGV << "--logdest" << "/var/log/puppet.debug"
 
 ARGV << "--rack"
 
