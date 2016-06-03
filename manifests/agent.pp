@@ -41,25 +41,31 @@ class puppet::agent (
   }
 
   $config = {
-    'main/logdir'                   =>  { 'value' => '/var/log/puppet' },
-    'main/vardir'                   =>  { 'value' => '/var/lib/puppet' },
-    'main/ssldir'                   =>  { 'value' => '/var/lib/puppet/ssl' },
-    'main/rundir'                   =>  { 'value' => '/var/run/puppet' },
-    'main/environment'              =>  { 'value' => $env },
-    'main/server'                   =>  { 'value' => $puppetmaster },
-    'main/http_keepalive_timeout'   =>  { 'value' => '25' },
+    'main/logdir'                             =>  { 'value' => '/var/log/puppet' },
+    'main/vardir'                             =>  { 'value' => '/var/lib/puppet' },
+    'main/ssldir'                             =>  { 'value' => '/var/lib/puppet/ssl' },
+    'main/rundir'                             =>  { 'value' => '/var/run/puppet' },
+    'main/environment'                        =>  { 'value' => $env },
+    'main/server'                             =>  { 'value' => $puppetmaster },
+    'main/http_keepalive_timeout'             =>  { 'value' => '25' },
+    'main/preferred_serialization_format'     =>  { 'value' => 'msgpack' },
 
-    'agent/runinterval'             =>  { 'value' => $runinterval },
-    'agent/always_cache_features'   =>  { 'value' => false },
-    'agent/ignorecache'             =>  { 'value' => true },
-    'agent/usecacheonfailure'       =>  { 'value' => false },
-    'agent/report'                  =>  { 'value' => true },
-    'agent/show_diff'               =>  { 'value' => true },
-    'agent/configtimeout'           =>  { 'value' => $configtimeout },
-    'agent/splay'                   =>  { 'value' => true },
-    'agent/pluginsync'              =>  { 'value' => true },
-    'agent/cfacter'                 =>  { 'value' => true },
-    'agent/catalog_cache_terminus'  =>  { 'value' => '' }
+    'agent/runinterval'                       =>  { 'value' => $runinterval },
+    'agent/always_cache_features'             =>  { 'value' => false },
+    'agent/ignorecache'                       =>  { 'value' => true },
+    'agent/usecacheonfailure'                 =>  { 'value' => false },
+    'agent/report'                            =>  { 'value' => true },
+    'agent/show_diff'                         =>  { 'value' => true },
+    'agent/configtimeout'                     =>  { 'value' => $configtimeout },
+    'agent/splay'                             =>  { 'value' => true },
+    'agent/pluginsync'                        =>  { 'value' => true },
+    'agent/cfacter'                           =>  { 'value' => true },
+    'agent/catalog_cache_terminus'            =>  { 'value' => '' }
+  }
+
+  package { 'msgpack':
+    provider    => 'gem',
+    ensure      => 'installed'
   }
 
   tidy { '/var/lib/puppet/client_data':
