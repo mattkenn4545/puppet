@@ -48,7 +48,7 @@ class puppet::agent (
     'main/environment'                        =>  { 'value' => $env },
     'main/server'                             =>  { 'value' => $puppetmaster },
     'main/http_keepalive_timeout'             =>  { 'value' => '25' },
-    'main/preferred_serialization_format'     =>  { 'value' => 'msgpack' },
+#    'main/preferred_serialization_format'     =>  { 'value' => 'msgpack' },
 
     'agent/runinterval'                       =>  { 'value' => $runinterval },
     'agent/always_cache_features'             =>  { 'value' => false },
