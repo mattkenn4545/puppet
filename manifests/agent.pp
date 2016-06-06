@@ -65,7 +65,7 @@ class puppet::agent (
 
   package { 'msgpack':
     provider    => 'gem',
-    ensure      => 'installed'
+    ensure      => 'absent'
   }
 
   tidy { '/var/lib/puppet/client_data':
