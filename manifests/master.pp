@@ -1,6 +1,6 @@
 class puppet::master (
-  $dns_alt_names            =  'puppet',
-  $passenger_max_pool_size  = 12,
+  $dns_alt_names            = 'puppet',
+  $passenger_max_pool_size  = $processorcount * 2,
   $environment_timeout      = '0',
   $cache_file_endpoints     = true
 ) inherits puppet {
